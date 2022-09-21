@@ -1,4 +1,36 @@
 from django.shortcuts import render
+from django.views import View
+from .models import *
+
+
+
+class ProductView(View):
+    def get(self,request):
+        topwares = Product.objects.filter(category='TW')
+        bottomware = Product.objects.filter(category='BW')
+        mobile = Product.objects.filter(category='M')
+        laptop = Product.objects.filter(category='L')
+
+        return render(request,'app/home.html',{'topwares':topwares,'bottomware':bottomware,'mobile':mobile,'laptop':laptop})
+
+
+class ProductDetailView(View):
+    def get(self,request,pk):
+        product = Product.objects.get(pk=pk)
+
+        return render(request,'app/productdetail.html',{'product':product})
+
+
+def BottomWare(request, data=None):
+    if data == None:
+        bottomware = Product.objects.filter(category='BW')
+    elif data == 'Lee' or data == 'Wrangler':
+        bottomware = Product.objects.filter(category='BW').filter(brand=data)
+    return render(request, 'app/mobile.html')
+
+
+
+
 
 def home(request):
  return render(request, 'app/home.html')
